@@ -1,6 +1,6 @@
 package io.weiss.sudoku
 
-object ScalaApp {
+object SudokuApp {
   def main(args: Array[String]) = {
     val input = Vector(
       Vector(0, 0, 6, 0, 5, 0, 7, 0, 3),
@@ -15,12 +15,12 @@ object ScalaApp {
     )
 
     println("input:")
-    println(Solver.gridToString(input))
+    println(SimpleSolver.gridToString(input))
 
-    Solver.solve(input) match {
+    SimpleSolver.solve(input) match {
       case Some(g) =>
         println("found solution:")
-        println(Solver.gridToString(g))
+        println(SimpleSolver.gridToString(g))
       case None => print("no solution :(")
     }
   }

@@ -2,7 +2,7 @@ package io.weiss.sudoku
 
 import com.typesafe.scalalogging.LazyLogging
 
-object Solver extends LazyLogging {
+object SimpleSolver extends LazyLogging {
 
   def validGrid(g: Vector[Vector[Int]]) =
     validRows(g) && validColumns(g) && validCells(g)
@@ -15,8 +15,8 @@ object Solver extends LazyLogging {
 
   def validCells(g: Vector[Vector[Int]]) = {
     val groupedRows = g grouped 3
-    groupedRows forall { g =>
-      val groupedCols = g.transpose grouped 3
+    groupedRows forall { r =>
+      val groupedCols = r.transpose grouped 3
       groupedCols forall { c =>
         noDoubleEntries(c.flatten)
       }
@@ -84,10 +84,10 @@ object Solver extends LazyLogging {
 
   def fullestCell(g: Vector[Vector[Int]]): (Int, Int, Int) = {
     val groupedRows = g grouped 3
-    groupedRows.zipWithIndex flatMap { case (g, rowGroup) =>
-      val groupedCols = g.transpose grouped 3
-      groupedCols.zipWithIndex map { case (c, colGroup) =>
-        (nonZeroes(c.flatten).size, rowGroup, colGroup)
+    groupedRows.zipWithIndex flatMap { case (rows, rowGroupIdx) =>
+      val groupedCols = rows.transpose grouped 3
+      groupedCols.zipWithIndex map { case (cols, colGroupIdx) =>
+        (nonZeroes(cols.flatten).size, rowGroupIdx, colGroupIdx)
       }
     } filter (_._1 < 9) maxBy (_._1)
   }
